@@ -1,6 +1,4 @@
-## 🔥 **Код (Flask + Jinja2)**  
-
-### **1. Установка Flask**  
+### Уже сделано**1. Установка Flask**  
 ```bash
 pip install flask
 ```
@@ -21,8 +19,8 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 # "База данных" в памяти (логин: пароль)
-fake_db = {
-    "alex": "password123",
+db = {
+    "nikita": "password123",
     "andrey": "qwerty"
 }
 
@@ -34,7 +32,7 @@ def home():
         password = request.form.get("password")
 
         # Проверяем логин/пароль
-        if username in fake_db and fake_db[username] == password:
+        if username in db and db[username] == password:
             return render_template("welcome.html", username=username)
         else:
             error = "Неверный логин или пароль!"
@@ -81,7 +79,7 @@ if __name__ == "__main__":
         <input type="password" name="password" placeholder="Пароль" required>
         <button type="submit">Войти</button>
     </form>
-
+    <!--лучше не писать строку ниже, а просто вбить в адресную строку /api/greet?username=Andrey&message=Test-->
     <p>Пример API: <a href="/api/greet?username=Andrey&message=Test">/api/greet?username=Andrey&message=Test</a></p>
 </body>
 </html>
@@ -135,12 +133,4 @@ if __name__ == "__main__":
    ```
 3. Откройте в браузере:  
    - Форма: `http://127.0.0.1:5000/`  
-   - API: `http://127.0.0.1:5000/api/greet?username=Andrey&message=Test`  
-
----
-
-## 💡 **Почему этот код подходит для экзамена?**  
-✅ **Минимализм**: Только Flask (без лишних библиотек).  
-✅ **Полный цикл**: Форма → обработка → рендер страницы + API.  
-✅ **Без БД**: Данные в памяти (`fake_db`).  
-✅ **Jinja2**: Шаблоны для фронта.  
+   - API: `http://127.0.0.1:5000/api/greet?username=Andrey&message=Test`

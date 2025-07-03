@@ -1,9 +1,7 @@
-Вот готовый пример кода на **FastAPI**, который покрывает основные требования: обработка GET/POST-запросов, рендеринг через Jinja2, простой API-эндпоинт и базовую валидацию.  
-
 ### **Код (main.py)**  
 ```python
 from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse # Как встретится в коде
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
@@ -16,15 +14,15 @@ class UserData(BaseModel):
     age: int
 
 # Готовые данные (имитация БД)
-fake_db = [
+db = [
     {"id": 1, "name": "Alice", "age": 25},
     {"id": 2, "name": "Bob", "age": 30},
 ]
 
 # Главная страница (GET) + форма (POST)
-@app.get("/", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse) # import
 async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "users": fake_db})
+    return templates.TemplateResponse("index.html", {"request": request, "users": db})
 
 @app.post("/submit-form/")
 async def handle_form(
@@ -32,22 +30,22 @@ async def handle_form(
     name: str = Form(required=True),
     age: int = Form(...), # required=True и ... одно и то же
 ):
-    new_user = {"id": len(fake_db) + 1, "name": name, "age": age}
-    fake_db.append(new_user)
+    new_user = {"id": len(db) + 1, "name": name, "age": age}
+    db.append(new_user)
     return templates.TemplateResponse(
         "index.html", 
-        {"request": request, "users": fake_db, "message": "User added!"}
+        {"request": request, "users": db, "message": "User added!"}
     )
 
 # Простой API-эндпоинт (GET + POST с JSON)
 @app.get("/api/data")
 async def get_data():
-    return {"users": fake_db}
+    return {"users": db}
 
 @app.post("/api/data")
 async def add_data(user: UserData):
-    new_user = {"id": len(fake_db) + 1, "name": user.name, "age": user.age}
-    fake_db.append(new_user)
+    new_user = {"id": len(db) + 1, "name": user.name, "age": user.age}
+    db.append(new_user)
     return {"status": "ok", "user": new_user}
 ```
 
@@ -69,7 +67,7 @@ async def add_data(user: UserData):
         {% endfor %}
     </ul>
 
-    <h2>Add User (Form)</h2>
+    <h2>Add User</h2>
     <form method="post" action="/submit-form/">
         <input type="text" name="name" placeholder="Name" required>
         <input type="number" name="age" placeholder="Age" required>
@@ -104,10 +102,10 @@ project/
 
 2. **Работа с формами (POST /submit-form/)**  
    - Данные формы (`name`, `age`) валидируются через `Form(...)`.  
-   - После добавления пользователя в `fake_db` страница обновляется с сообщением.  
+   - После добавления пользователя в `db` страница обновляется с сообщением.  
 
 3. **API-эндпоинты (/api/data)**  
-   - **GET**: возвращает JSON с данными из `fake_db`.  
+   - **GET**: возвращает JSON с данными из `db`.  
    - **POST**: принимает JSON, валидирует через `UserData` (Pydantic), добавляет запись.  
 
 4. **Шаблон (index.html)**  
@@ -116,17 +114,8 @@ project/
 
 ---
 
-### **Как это соответствует требованиям экзамена?**  
-✅ **Обработка данных**: GET/POST, формы, JSON.  
-✅ **Jinja2**: рендеринг HTML с переменными.  
-✅ **API**: эндпоинт `/api/data` с JSON-ответом.  
-✅ **Минимум библиотек**: только FastAPI + Jinja2 + Pydantic (базовые для веба).  
-✅ **Нет ORM/БД**: используются готовые данные (`fake_db`).  
-
----
-
 ### **Как запустить?**  
-1. Установите зависимости:  
+1. Установите зависимости:  (уже есть)
    ```bash
    pip install fastapi uvicorn jinja2 python-multipart
    ```  
@@ -135,5 +124,3 @@ project/
    uvicorn main:app --reload
    ```  
 3. Откройте `http://127.0.0.1:8000/`.  
-
-Этот код — отличная база для экзамена: он простой, но покрывает все ключевые темы. Доработайте его под свои нужды (например, добавьте OAuth flow с `requests_oauthlib`).

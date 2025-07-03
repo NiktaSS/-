@@ -1,7 +1,3 @@
-Вот готовый пример экзаменационного решения на **Django**, охватывающий ключевые требования: обработку запросов, рендеринг Jinja2, простой API-эндпоинт и базовую работу с формами.  
-
----
-
 ### **1. Настройка проекта (если нужно создать с нуля)**  
 ```bash
 django-admin startproject exam_prep
@@ -24,9 +20,9 @@ INSTALLED_APPS = [
 #### **`main/views.py`** (основная логика)  
 ```python
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-import json
+from django.http import JsonResponse # Как встретится в коде
+from django.views.decorators.http import require_http_methods # Как встретится в коде
+import json # не надо, вроде не используется
 
 # Пример готовых данных (вместо БД)
 ITEMS = [
@@ -36,12 +32,12 @@ ITEMS = [
 
 @require_http_methods(["GET"]) # если нельзя, то код снизу
 def item_list(request):
-    """Рендеринг списка items через Jinja2."""
+    """Рендеринг списка items через Jinja2.""" # просто комментарий
     return render(request, 'items.html', {'items': ITEMS})
 
 @require_http_methods(["GET", "POST"])
 def add_item(request):
-    """Обработка формы (GET/POST)."""
+    """Обработка формы (GET/POST).""" # просто комментарий
     if request.method == 'POST':
         # Получаем данные из формы
         name = request.POST.get('name')
@@ -58,7 +54,7 @@ def add_item(request):
 
 @require_http_methods(["GET"])
 def api_items(request):
-    """Простой API-эндпоинт (возвращает JSON)."""
+    """Простой API-эндпоинт (возвращает JSON).""" # просто комментарий
     return JsonResponse({'items': ITEMS})
 ```
 
@@ -166,7 +162,7 @@ urlpatterns = [
 #### **`main/views.py`** (без @require_http_methods)  
 ```python
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponseNotAllowed
+from django.http import JsonResponse, HttpResponseNotAllowed # Как встретится в коде
 
 # Пример готовых данных (вместо БД)
 ITEMS = [
@@ -175,10 +171,8 @@ ITEMS = [
 ]
 
 def item_list(request):
-    """Рендеринг списка items через Jinja2 (только GET)."""
-    if request.method == 'GET':
-        return render(request, 'items.html', {'items': ITEMS})
-    return HttpResponseNotAllowed(['GET']) # не обязательно
+    """Рендеринг списка items через Jinja2 (только GET).""" # просто комментарий
+    return render(request, 'items.html', {'items': ITEMS})
 
 def add_item(request):
     """Обработка формы (GET/POST)."""
@@ -198,7 +192,6 @@ def add_item(request):
     return render(request, 'add_item.html')
 
 def api_items(request):
-    """Простой API-эндпоинт (только GET)."""
-    if request.method == 'GET':
-        return JsonResponse({'items': ITEMS})
+    """Простой API-эндпоинт (только GET).""" # просто комментарий
+    return JsonResponse({'items': ITEMS})
 ```
